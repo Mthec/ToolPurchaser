@@ -17,7 +17,6 @@ public class ToolPurchaserTemplate implements ModCreature {
 
     @Override
     public CreatureTemplateBuilder createCreateTemplateBuilder() {
-        // TODO - Test NPC Trader applies.
         int[] types = new int[] {
                 CreatureTypes.C_TYPE_INVULNERABLE,
                 CreatureTypes.C_TYPE_HUMAN,
@@ -85,8 +84,6 @@ public class ToolPurchaserTemplate implements ModCreature {
             trader.pushToFloorLevel(floorLevel);
         }
 
-        // TODO - Needed if NPC_TRADER?  No.
-        //CustomTraderEconomy.createShop(trader.getWurmId());
         trader.getShop().setMoney(MonetaryConstants.COIN_GOLD * 100);
 
         // Cleaning up after Shop.createShop

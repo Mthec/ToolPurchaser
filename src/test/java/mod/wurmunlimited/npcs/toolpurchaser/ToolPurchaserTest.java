@@ -13,6 +13,7 @@ public abstract class ToolPurchaserTest {
     @BeforeEach
     protected void setUp() throws Exception {
         factory = new ToolPurchaserObjectsFactory();
+        Prices.ql = 0;
         ((Map<Byte, Float>)ReflectionUtil.getPrivateField(null, Prices.class.getDeclaredField("materials"))).clear();
         ((Map<Byte, Float>)ReflectionUtil.getPrivateField(null, Prices.class.getDeclaredField("enchantments"))).clear();
     }

@@ -52,7 +52,7 @@ tasks {
 
         includeEmptyDirs = false
         archiveFileName.set("$shortName.jar")
-        exclude("**/TradeHandler.class", "**/Trade.class", "**/TradingWindow.class")
+        exclude("**/TradeHandler.class")
 
         manifest {
             attributes["Implementation-Version"] = version
@@ -62,11 +62,11 @@ tasks {
     register<Zip>("zip") {
         into(shortName) {
             from(jar)
+            from("src/main/resources/MaterialPrices.properties")
+            from("src/main/resources/EnchantmentPrices.properties")
         }
 
         from("src/main/resources/$shortName.properties")
-        from("src/main/resources/MaterialPrices.properties")
-        from("src/main/resources/EnchantmentPrices.properties")
         archiveFileName.set("$shortName.zip")
     }
 }
