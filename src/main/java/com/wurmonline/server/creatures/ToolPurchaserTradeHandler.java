@@ -60,7 +60,6 @@ public class ToolPurchaserTradeHandler extends TradeHandler {
 
     @Override
     public int getTraderBuyPriceForItem(Item item) {
-        // TODO - Test 0 value items are not accepted.
         if (isAccepted(item)) {
             float price = (item.getQualityLevel() * Prices.ql) * Prices.getMaterialModifier(item.getMaterial());
 
@@ -69,6 +68,10 @@ public class ToolPurchaserTradeHandler extends TradeHandler {
                 for (SpellEffect effect : effects.getEffects()) {
                     price += Prices.enchantment(effect.type) * effect.power;
                 }
+            }
+
+            if (item.enchantment != 0) {
+                price += Prices.enchantment(item.enchantment);
             }
 
             return Integer.max(1, (int)price);

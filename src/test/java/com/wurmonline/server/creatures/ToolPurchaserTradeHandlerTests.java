@@ -129,6 +129,27 @@ public class ToolPurchaserTradeHandlerTests extends ToolPurchaserTest {
     }
 
     @Test
+    void testEnchantmentEnchantmentPricesAdded() {
+        setEnchantmentPrice(Spell.ENCHANT_ANIMAL_HATE, 1f);
+        setEnchantmentPrice(Spell.ENCHANT_HUMAN_HATE, 2f);
+        setEnchantmentPrice(Spell.ENCHANT_REGENERATION_HATE, 3f);
+        setEnchantmentPrice(Spell.ENCHANT_DRAGON_HATE, 4f);
+        Item item = factory.createNewItem(ItemList.swordShort);
+
+        item.enchantment = Spell.ENCHANT_ANIMAL_HATE;
+        assertEquals(1f, handler.getTraderBuyPriceForItem(item));
+
+        item.enchantment = Spell.ENCHANT_HUMAN_HATE;
+        assertEquals(2f, handler.getTraderBuyPriceForItem(item));
+
+        item.enchantment = Spell.ENCHANT_REGENERATION_HATE;
+        assertEquals(3f, handler.getTraderBuyPriceForItem(item));
+
+        item.enchantment = Spell.ENCHANT_DRAGON_HATE;
+        assertEquals(4f, handler.getTraderBuyPriceForItem(item));
+    }
+
+    @Test
     void testBalanceAddsCorrectCoins() {
         Prices.ql = 1;
         Item item = factory.createNewItem(ItemList.rake);
