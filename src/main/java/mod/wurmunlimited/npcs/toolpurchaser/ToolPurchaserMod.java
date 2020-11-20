@@ -196,6 +196,7 @@ public class ToolPurchaserMod implements WurmServerMod, Configurable, Initable, 
             creature.getShop().setMoney(MonetaryConstants.COIN_GOLD * 100);
         }
 
+        //noinspection SuspiciousInvocationHandlerImplementation
         return tradeCompleted;
     }
 
