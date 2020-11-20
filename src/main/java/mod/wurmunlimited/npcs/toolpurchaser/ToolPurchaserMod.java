@@ -150,8 +150,6 @@ public class ToolPurchaserMod implements WurmServerMod, Configurable, Initable, 
 
     @Override
     public void onServerStarted() {
-//        ModActions.registerAction(new ToolPurchaserTradeAction());
-
         if (printPrices) {
             StringBuilder sb = new StringBuilder("Tool Purchaser Prices:\nQL - " + Prices.ql + "\nMaterials:\n");
             for (Map.Entry<Byte, Float> material : Prices.materials.entrySet()) {
