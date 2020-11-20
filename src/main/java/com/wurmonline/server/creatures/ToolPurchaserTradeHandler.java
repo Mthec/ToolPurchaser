@@ -74,7 +74,8 @@ public class ToolPurchaserTradeHandler extends TradeHandler {
                 price += Prices.enchantment(item.enchantment);
             }
 
-            return Integer.max(1, (int)price);
+            if (price > 0)
+                return Integer.max(1, (int)price);
         }
 
         return 0;
