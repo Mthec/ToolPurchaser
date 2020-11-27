@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "mod.wurmunlimited.npcs.toolpurchaser"
-version = "0.1"
+version = "0.1.1"
 val shortName = "toolpurchaser"
 val wurmServerFolder = "E:/Steam/steamapps/common/Wurm Unlimited/WurmServerLauncher/"
 

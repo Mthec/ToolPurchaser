@@ -96,6 +96,38 @@ public class ToolPurchaserTradeHandlerTests extends ToolPurchaserTest {
     }
 
     @Test
+    void testItemPriceMaterialFlatRate() {
+        Prices.ql = 1;
+        setMaterialFlatRate(ItemMaterials.MATERIAL_IRON, 2.0f);
+        setMaterialFlatRate(ItemMaterials.MATERIAL_STEEL, 3.0f);
+        Item item = factory.createNewItem(ItemList.rake);
+        item.setQualityLevel(25);
+
+        item.setMaterial(ItemMaterials.MATERIAL_IRON);
+        assertEquals(27, handler.getTraderBuyPriceForItem(item));
+
+        item.setMaterial(ItemMaterials.MATERIAL_STEEL);
+        assertEquals(28, handler.getTraderBuyPriceForItem(item));
+    }
+
+    @Test
+    void testItemPriceMaterialModifierAndFlatRate() {
+        Prices.ql = 1;
+        setMaterialModifier(ItemMaterials.MATERIAL_IRON, 2.0f);
+        setMaterialModifier(ItemMaterials.MATERIAL_STEEL, 3.0f);
+        setMaterialFlatRate(ItemMaterials.MATERIAL_IRON, 2.0f);
+        setMaterialFlatRate(ItemMaterials.MATERIAL_STEEL, 3.0f);
+        Item item = factory.createNewItem(ItemList.rake);
+        item.setQualityLevel(25);
+
+        item.setMaterial(ItemMaterials.MATERIAL_IRON);
+        assertEquals(52, handler.getTraderBuyPriceForItem(item));
+
+        item.setMaterial(ItemMaterials.MATERIAL_STEEL);
+        assertEquals(78, handler.getTraderBuyPriceForItem(item));
+    }
+
+    @Test
     void testItemPriceEnchantment() {
         Prices.ql = 0;
         setEnchantmentPrice(Spell.BUFF_CIRCLE_CUNNING, 1);
@@ -147,6 +179,80 @@ public class ToolPurchaserTradeHandlerTests extends ToolPurchaserTest {
 
         item.enchantment = Spell.ENCHANT_DRAGON_HATE;
         assertEquals(4f, handler.getTraderBuyPriceForItem(item));
+    }
+
+    @Test
+    void testItemPriceEnchantmentFlatRate() {
+        Prices.ql = 0;
+        Prices.enchantmentFlatRate = 10;
+        Item item = factory.createNewItem(ItemList.rake);
+        new ItemSpellEffects(item.getWurmId());
+
+        item.getSpellEffects().addSpellEffect(new SpellEffect(-10, Spell.BUFF_CIRCLE_CUNNING, 6, 1));
+        assertEquals(10, handler.getTraderBuyPriceForItem(item));
+
+        item.getSpellEffects().addSpellEffect(new SpellEffect(-10, Spell.BUFF_WIND_OF_AGES, 5, 1));
+        assertEquals(20, handler.getTraderBuyPriceForItem(item));
+    }
+
+    @Test
+    void testItemPriceEnchantmentAndFlatRate() {
+        Prices.ql = 0;
+        Prices.enchantmentFlatRate = 10;
+        setEnchantmentPrice(Spell.BUFF_CIRCLE_CUNNING, 1);
+        setEnchantmentPrice(Spell.BUFF_WIND_OF_AGES, 2);
+        Item item = factory.createNewItem(ItemList.rake);
+        new ItemSpellEffects(item.getWurmId());
+
+        item.getSpellEffects().addSpellEffect(new SpellEffect(-10, Spell.BUFF_CIRCLE_CUNNING, 6, 1));
+        assertEquals(16, handler.getTraderBuyPriceForItem(item));
+
+        item.getSpellEffects().addSpellEffect(new SpellEffect(-10, Spell.BUFF_WIND_OF_AGES, 5, 1));
+        assertEquals(36, handler.getTraderBuyPriceForItem(item));
+    }
+
+    @Test
+    void testItemPriceIgnoredEnchantment() {
+        Prices.ql = 0;
+        Prices.enchantmentFlatRate = 10;
+        addIgnoredEnchantment(Spell.BUFF_CIRCLE_CUNNING);
+        setEnchantmentPrice(Spell.BUFF_CIRCLE_CUNNING, 1);
+        setEnchantmentPrice(Spell.BUFF_WIND_OF_AGES, 2);
+        Item item = factory.createNewItem(ItemList.rake);
+        new ItemSpellEffects(item.getWurmId());
+
+        item.getSpellEffects().addSpellEffect(new SpellEffect(-10, Spell.BUFF_CIRCLE_CUNNING, 6, 1));
+        assertEquals(0, handler.getTraderBuyPriceForItem(item));
+
+        item.getSpellEffects().addSpellEffect(new SpellEffect(-10, Spell.BUFF_WIND_OF_AGES, 5, 1));
+        assertEquals(20, handler.getTraderBuyPriceForItem(item));
+    }
+
+    @Test
+    void testEnchantmentEnchantmentFlatRate() {
+        Prices.ql = 0;
+        Prices.enchantmentFlatRate = 10;
+        setEnchantmentPrice(Spell.ENCHANT_ANIMAL_HATE, 3f);
+        setEnchantmentPrice(Spell.ENCHANT_HUMAN_HATE, 4f);
+        Item item = factory.createNewItem(ItemList.swordShort);
+
+        item.enchantment = Spell.ENCHANT_ANIMAL_HATE;
+        assertEquals(13f, handler.getTraderBuyPriceForItem(item));
+
+        item.enchantment = Spell.ENCHANT_HUMAN_HATE;
+        assertEquals(14f, handler.getTraderBuyPriceForItem(item));
+    }
+
+    @Test
+    void testEnchantmentEnchantmentIgnored() {
+        Prices.ql = 1;
+        setEnchantmentPrice(Spell.ENCHANT_ANIMAL_HATE, 3f);
+        addIgnoredEnchantment(Spell.ENCHANT_ANIMAL_HATE);
+        Item item = factory.createNewItem(ItemList.swordShort);
+        item.setQualityLevel(1);
+
+        item.enchantment = Spell.ENCHANT_ANIMAL_HATE;
+        assertEquals(1f, handler.getTraderBuyPriceForItem(item));
     }
 
     @Test

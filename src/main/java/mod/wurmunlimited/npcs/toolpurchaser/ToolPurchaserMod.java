@@ -56,9 +56,16 @@ public class ToolPurchaserMod implements WurmServerMod, Configurable, Initable, 
 
             for (String name : materials.stringPropertyNames()) {
                 try {
-                    val = materials.getProperty(name);
-                    if (val != null) {
-                        Prices.materials.put(Byte.parseByte(name), Float.parseFloat(val));
+                    if (name.startsWith("flat")) {
+                        val = materials.getProperty(name);
+                        if (val != null) {
+                            Prices.materialFlatRates.put(Byte.parseByte(name.substring(4)), Float.parseFloat(val));
+                        }
+                    } else {
+                        val = materials.getProperty(name);
+                        if (val != null) {
+                            Prices.materials.put(Byte.parseByte(name), Float.parseFloat(val));
+                        }
                     }
                 } catch (NumberFormatException e) {
                     logger.warning("Incorrect id/value found (" + name + "=" + val + "), ignoring.");
@@ -74,13 +81,31 @@ public class ToolPurchaserMod implements WurmServerMod, Configurable, Initable, 
             enchantments.load(Files.newInputStream(Paths.get("mods", "toolpurchaser", "EnchantmentPrices.properties")));
 
             for (String name : enchantments.stringPropertyNames()) {
-                try {
-                    val = enchantments.getProperty(name);
-                    if (val != null) {
-                        Prices.enchantments.put(Byte.parseByte(name), Float.parseFloat(val));
+                if (name.equals("flat_rate")) {
+                    try {
+                        val = enchantments.getProperty(name);
+                        Prices.enchantmentFlatRate = Float.parseFloat(val);
+                    } catch (NumberFormatException e) {
+                        logger.warning("Invalid flat_rate value found (" + val + "), setting to 0.");
                     }
-                } catch (NumberFormatException e) {
-                    logger.warning("Incorrect id/value found (" + name + "=" + val + "), ignoring.");
+                } else if (name.equals("ignored")) {
+                    val = enchantments.getProperty(name);
+                    for (String sub : val.split(",")) {
+                        try {
+                            Prices.ignoredEnchantments.add(Byte.parseByte(sub));
+                        } catch (NumberFormatException e) {
+                            logger.warning("Invalid value found in ignored (" + val + "), ignoring.");
+                        }
+                    }
+                } else {
+                    try {
+                        val = enchantments.getProperty(name);
+                        if (val != null) {
+                            Prices.enchantments.put(Byte.parseByte(name), Float.parseFloat(val));
+                        }
+                    } catch (NumberFormatException e) {
+                        logger.warning("Incorrect id/value found (" + name + "=" + val + "), ignoring.");
+                    }
                 }
             }
         } catch (IOException e) {
@@ -155,9 +180,18 @@ public class ToolPurchaserMod implements WurmServerMod, Configurable, Initable, 
             for (Map.Entry<Byte, Float> material : Prices.materials.entrySet()) {
                 sb.append(MaterialUtilities.getMaterialString(material.getKey())).append(" - ").append(material.getValue()).append("\n");
             }
+            sb.append("Flat Rate Materials:\n");
+            for (Map.Entry<Byte, Float> material : Prices.materialFlatRates.entrySet()) {
+                sb.append(MaterialUtilities.getMaterialString(material.getKey())).append(" - ").append(material.getValue()).append("\n");
+            }
+            sb.append("Enchantment Flat Rate - ").append(Prices.enchantmentFlatRate).append("\n");
             sb.append("Enchantments:\n");
             for (Map.Entry<Byte, Float> enchantment : Prices.enchantments.entrySet()) {
                 sb.append(Spells.getEnchantment(enchantment.getKey())).append(" - ").append(enchantment.getValue()).append("\n");
+            }
+            sb.append("Ignored Enchantments:\n");
+            for (Byte type : Prices.ignoredEnchantments) {
+                sb.append(Spells.getEnchantment(type)).append("\n");
             }
 
             logger.info(sb.toString());

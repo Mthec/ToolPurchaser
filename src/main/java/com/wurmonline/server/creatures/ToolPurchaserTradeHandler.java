@@ -62,11 +62,12 @@ public class ToolPurchaserTradeHandler extends TradeHandler {
     public int getTraderBuyPriceForItem(Item item) {
         if (isAccepted(item)) {
             float price = (item.getQualityLevel() * Prices.ql) * Prices.getMaterialModifier(item.getMaterial());
+            price += Prices.getMaterialFlatRate(item.getMaterial());
 
             ItemSpellEffects effects = item.getSpellEffects();
             if (effects != null) {
                 for (SpellEffect effect : effects.getEffects()) {
-                    price += Prices.enchantment(effect.type) * effect.power;
+                    price += Prices.enchantment(effect.type, effect.power);
                 }
             }
 
