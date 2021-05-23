@@ -14,6 +14,7 @@ repositories {
 dependencies {
     testImplementation(project(":WurmTestingHelper"))
     implementation(project(":BMLBuilder"))
+    implementation(project(":PlaceNpc"))
     implementation(fileTree(wurmServerFolder) { include("server.jar") })
     implementation(fileTree(wurmServerFolder) { include("modlauncher.jar", "javassist.jar") })
 //    implementation(fileTree(wurmServerFolder + "lib/") { include("WurmUnlimitedCommon-1.9.2.7.jar", "guava-18.0.jar",
@@ -55,7 +56,7 @@ tasks {
         exclude("**/TradeHandler.class")
 
         manifest {
-            attributes["Implementation-Version"] = version
+            attributes["Implementation-Version"] = archiveVersion
         }
     }
 

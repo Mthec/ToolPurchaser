@@ -1,12 +1,13 @@
 package mod.wurmunlimited.npcs.toolpurchaser;
 
-import org.gotti.wurmunlimited.modloader.ReflectionUtil;
+import com.wurmonline.server.behaviours.PlaceNpcMenu;
+import com.wurmonline.server.behaviours.PlaceToolPurchaserAction;
 import org.junit.jupiter.api.BeforeEach;
-
-import java.util.Map;
 
 public abstract class ToolPurchaserTest {
     protected ToolPurchaserObjectsFactory factory;
+    private static boolean init = false;
+    protected static PlaceNpcMenu menu;
 
     @BeforeEach
     protected void setUp() throws Exception {
@@ -18,6 +19,12 @@ public abstract class ToolPurchaserTest {
         Prices.enchantments.clear();
         Prices.ignoredEnchantments.clear();
         Prices.ignoredEnchantments.add((byte)0);
+
+        if (!init) {
+            new PlaceToolPurchaserAction();
+            menu = PlaceNpcMenu.registerAction();
+            init = true;
+        }
     }
 
     protected void setMaterialModifier(byte material, float modifier) {
