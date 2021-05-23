@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "mod.wurmunlimited.npcs.toolpurchaser"
-version = "0.1.1"
+version = "0.1.2"
 val shortName = "toolpurchaser"
 val wurmServerFolder = "E:/Steam/steamapps/common/Wurm Unlimited/WurmServerLauncher/"
 
@@ -50,6 +50,7 @@ tasks {
         }
 
         from(configurations.runtimeClasspath.get().filter { it.name.startsWith("BMLBuilder") && it.name.endsWith("jar") }.map { zipTree(it) })
+        from(configurations.runtimeClasspath.get().filter { it.name.startsWith("PlaceNpc") && it.name.endsWith("jar") }.map { zipTree(it) })
 
         includeEmptyDirs = false
         archiveFileName.set("$shortName.jar")
