@@ -36,12 +36,21 @@ import java.util.logging.Logger;
 
 public class ToolPurchaserMod implements WurmServerMod, Configurable, Initable, PreInitable, ServerStartedListener {
     private static final Logger logger = Logger.getLogger(ToolPurchaserMod.class.getName());
+    public static final int maxNameLength = 20;
     private static boolean printPrices = false;
+    private static String namePrefix = "Trader";
+
+    public static String getNamePrefix() {
+        return namePrefix;
+    }
 
     @Override
     public void configure(Properties properties) {
         String val = properties.getProperty("print_prices");
         printPrices = val != null && val.equals("true");
+        namePrefix = properties.getProperty("name_prefix");
+        if (namePrefix == null)
+            namePrefix = "Trader";
         val = properties.getProperty("ql_price");
         try {
             if (val != null)

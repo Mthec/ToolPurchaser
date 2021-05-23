@@ -2,6 +2,7 @@ package mod.wurmunlimited.npcs.toolpurchaser;
 
 import com.wurmonline.server.behaviours.PlaceNpcMenu;
 import com.wurmonline.server.behaviours.PlaceToolPurchaserAction;
+import org.gotti.wurmunlimited.modloader.ReflectionUtil;
 import org.junit.jupiter.api.BeforeEach;
 
 public abstract class ToolPurchaserTest {
@@ -12,6 +13,7 @@ public abstract class ToolPurchaserTest {
     @BeforeEach
     protected void setUp() throws Exception {
         factory = new ToolPurchaserObjectsFactory();
+        ReflectionUtil.setPrivateField(null, ToolPurchaserMod.class.getDeclaredField("namePrefix"), "Trader");
         Prices.ql = 0;
         Prices.materials.clear();
         Prices.materialFlatRates.clear();

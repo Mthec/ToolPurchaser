@@ -12,13 +12,13 @@ import mod.wurmunlimited.npcs.toolpurchaser.ToolPurchaserTemplate;
 import java.util.Properties;
 import java.util.Random;
 
-public class PlaceToolPurchaserQuestion extends Question {
+public class PlaceToolPurchaserQuestion extends ToolPurchaserQuestionExtension {
     private static final Random r = new Random();
     private final VolaTile tile;
     private final int floorLevel;
 
     public PlaceToolPurchaserQuestion(Creature performer, VolaTile tile, int floorLevel) {
-        super(performer, "Set Up Trader", "", MANAGETRADER, -10);
+        super(performer, "Set Up Tool Purchaser", "", MANAGETRADER, -10);
         this.tile = tile;
         this.floorLevel = floorLevel;
     }
@@ -47,7 +47,13 @@ public class PlaceToolPurchaserQuestion extends Question {
 
         if (locationIsValid(responder)) {
             try {
-                Creature trader = ToolPurchaserTemplate.createNewTrader(tile, floorLevel, "Trader_" + name, sex, responder.getKingdomId());
+                String fullName;
+                String prefix = getPrefix();
+                if (prefix.isEmpty())
+                    fullName = name;
+                else
+                    fullName = prefix + "_" + name;
+                Creature trader = ToolPurchaserTemplate.createNewTrader(tile, floorLevel, fullName, sex, responder.getKingdomId());
                 logger.info(responder.getName() + " created a tool purchaser: " + trader.getWurmId());
             } catch (Exception e) {
                 responder.getCommunicator().sendAlertServerMessage("An error occurred in the rifts of the void. The trader was not created.");
