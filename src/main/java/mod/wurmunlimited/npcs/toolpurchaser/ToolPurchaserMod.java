@@ -1,6 +1,7 @@
 package mod.wurmunlimited.npcs.toolpurchaser;
 
 import com.wurmonline.server.Items;
+import com.wurmonline.server.behaviours.ManageToolPurchaserAction;
 import com.wurmonline.server.behaviours.PlaceNpcMenu;
 import com.wurmonline.server.behaviours.PlaceToolPurchaserAction;
 import com.wurmonline.server.creatures.Creature;
@@ -186,8 +187,9 @@ public class ToolPurchaserMod implements WurmServerMod, Configurable, Initable, 
 
     @Override
     public void onServerStarted() {
+        ModActions.registerAction(new ManageToolPurchaserAction());
         new PlaceToolPurchaserAction();
-        PlaceNpcMenu.registerAction();
+        PlaceNpcMenu.register();
 
         if (printPrices) {
             StringBuilder sb = new StringBuilder("Tool Purchaser Prices:\nQL - " + Prices.ql + "\nMaterials:\n");

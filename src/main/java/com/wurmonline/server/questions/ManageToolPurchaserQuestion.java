@@ -13,7 +13,7 @@ import static com.wurmonline.server.creatures.CreaturePackageCaller.saveCreature
 public class ManageToolPurchaserQuestion extends ToolPurchaserQuestionExtension {
     private final Creature toolPurchaser;
 
-    ManageToolPurchaserQuestion(Creature responder, Creature toolPurchaser) {
+    public ManageToolPurchaserQuestion(Creature responder, Creature toolPurchaser) {
         super(responder, "Manage Tool Purchaser", "", QuestionTypes.MANAGETRADER, toolPurchaser.getWurmId());
         this.toolPurchaser = toolPurchaser;
     }

@@ -47,12 +47,7 @@ public class PlaceToolPurchaserQuestion extends ToolPurchaserQuestionExtension {
 
         if (locationIsValid(responder)) {
             try {
-                String fullName;
-                String prefix = getPrefix();
-                if (prefix.isEmpty())
-                    fullName = name;
-                else
-                    fullName = prefix + "_" + name;
+                String fullName = getPrefix() + name;
                 Creature trader = ToolPurchaserTemplate.createNewTrader(tile, floorLevel, fullName, sex, responder.getKingdomId());
                 logger.info(responder.getName() + " created a tool purchaser: " + trader.getWurmId());
             } catch (Exception e) {

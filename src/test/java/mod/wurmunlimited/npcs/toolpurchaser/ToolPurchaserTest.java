@@ -24,7 +24,7 @@ public abstract class ToolPurchaserTest {
 
         if (!init) {
             new PlaceToolPurchaserAction();
-            menu = PlaceNpcMenu.registerAction();
+            menu = PlaceNpcMenu.register();
             init = true;
         }
     }
